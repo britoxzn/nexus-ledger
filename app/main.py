@@ -28,23 +28,28 @@ def create_access_token(data: dict):
 # --- INICIALIZAÇÃO DA API ---
 Base.metadata.create_all(bind=engine)
 
+# ... importações ...
+
 app = FastAPI(title="Nexus Ledger API")
 
-# --- CONFIGURAÇÃO DE CORS (ADICIONADO AGORA) ---
-# Isso libera o acesso para o seu Front-end poder chamar a API
+# --- CONFIGURAÇÃO DE CORS (LIBERANDO A VERCEL) ---
 origins = [
     "http://localhost",
     "http://localhost:5500",
     "http://127.0.0.1:5500",
+    "https://nexus-ledger-blue.vercel.app", # <--- ADICIONE O SEU LINK DA VERCEL AQUI
+    "https://nexus-ledger.vercel.app"      # Adicione variações se tiver
 ]
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"], # Libera geral (ideal para desenvolvimento)
+    allow_origins=["*"], # Mantenha "*" para garantir, ou use 'origins' para ser restrito
     allow_credentials=True,
-    allow_methods=["*"], # Libera todos os métodos (GET, POST, PUT, DELETE)
-    allow_headers=["*"], # Libera todos os cabeçalhos
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
+
+# ... resto do código ...
 
 # Conectando as rotas
 app.include_router(tenants.router)
